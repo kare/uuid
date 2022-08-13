@@ -20,16 +20,6 @@ func TestUUID(t *testing.T) {
 	t.Logf("%s len=%v", id.String(), len(id.String()))
 }
 
-// tmpu avoids compiler optimisations in benchmarks
-var tmpu uuid.UUID
-
-func BenchmarkUUID(b *testing.B) {
-	b.ReportAllocs()
-	for n := 0; n < b.N; n++ {
-		tmpu = uuid.New()
-	}
-}
-
 func TestParse(t *testing.T) {
 	validID := "ca12c697-468c-45e3-88e6-071614dbe7d4"
 	tests := []struct {
@@ -56,5 +46,15 @@ func TestParse(t *testing.T) {
 				return
 			}
 		})
+	}
+}
+
+// tmpu avoids compiler optimisations in benchmarks
+var tmpu uuid.UUID
+
+func BenchmarkUUID(b *testing.B) {
+	b.ReportAllocs()
+	for n := 0; n < b.N; n++ {
+		tmpu = uuid.New()
 	}
 }
