@@ -7,17 +7,29 @@ import (
 	"kkn.fi/uuid"
 )
 
-func TestUUID(t *testing.T) {
+var validUUIDRegexp = "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+
+func TestNew(t *testing.T) {
 	id := uuid.New()
-	re := "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
-	matched, err := regexp.Match(re, []byte(id.String()))
+	b := []byte(id.String())
+	matched, err := regexp.Match(validUUIDRegexp, b)
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
 	if !matched {
 		t.Errorf("generated id did not match expected format: '%v' len=%v", id.String(), len(id.String()))
 	}
-	t.Logf("%s len=%v", id.String(), len(id.String()))
+}
+
+func TestNewString(t *testing.T) {
+	id := uuid.NewString()
+	matched, err := regexp.Match(validUUIDRegexp, []byte(id))
+	if err != nil {
+		t.Errorf("unexpected error: %v", err)
+	}
+	if !matched {
+		t.Errorf("generated id did not match expected format: '%s' len=%v", id, len(id))
+	}
 }
 
 func TestParse(t *testing.T) {
@@ -40,6 +52,7 @@ func TestParse(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			tt := tt
 			_, err := uuid.Parse(tt.input)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Parse() error = %v, wantErr %v", err, tt.wantErr)
