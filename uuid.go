@@ -16,6 +16,13 @@ func New() UUID {
 	}
 }
 
+// NewString create a Random (Version 4) UUID conveniently as a string.
+func NewString() string {
+	id := New()
+	s := id.String()
+	return s
+}
+
 // Parse decodes s into a UUID or returns an error.
 func Parse(s string) (UUID, error) {
 	id, err := guuid.Parse(s)
