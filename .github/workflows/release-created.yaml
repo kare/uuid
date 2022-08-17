@@ -7,6 +7,6 @@ on:
 jobs:
   released:
     uses: kare/github/.github/workflows/go-release.yaml@main
-    inputs:
+    with:
       go_module_path: kkn.fi/uuid
       version: ${{ github.event.release.tag_name }}
